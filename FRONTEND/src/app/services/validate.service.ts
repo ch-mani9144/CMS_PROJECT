@@ -58,4 +58,16 @@ export class ValidateService {
     else 
       return true;
   }
+
+  validateFeed(obj){
+    if(obj.firstname==""||obj.lastname==""||obj.country==""||obj.state==""||obj.zip==""||obj.email==""||obj.feedback==""||obj.address==""){
+      return false;
+    }
+    else if(obj.firstname==undefined||obj.lastname==undefined||obj.country==undefined||obj.state==undefined||obj.zip==undefined||obj.email==undefined||obj.feedback==undefined||obj.address==undefined){
+      return false;
+    }
+    else {
+      return true;
+    }
+  }
 }

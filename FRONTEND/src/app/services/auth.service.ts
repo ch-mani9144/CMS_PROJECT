@@ -26,7 +26,7 @@ export class AuthService {
   feedback(data){
     var headres = new Headers();
     headres.append('content-type','application/json');
-    return this.http.post("http://localhost:3000/feedback_send",data,{headers:headres})
+    return this.http.post("http://localhost:3000/mail/feedback_send",data,{headers:headres})
     .map(res =>  res.json());
   }
 

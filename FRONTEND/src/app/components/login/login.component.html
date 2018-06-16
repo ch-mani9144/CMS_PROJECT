@@ -16,7 +16,7 @@
   
           <div class="form-group">
           <input type="password" name="password" [(ngModel)]="password" class="form-control" placeholder="password" required>
-            <br><a href="#" style="color: rgb(205, 235, 225)">Forgot password?</a>
+            <br><a [routerLink]="['/forgot']" style="color: rgb(205, 235, 225)">Forgot password?</a>
         </div>
           <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
     </div>

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
+import { ValidateService } from '../../services/validate.service';
 
 @Component({
   selector: 'app-contactus',
@@ -21,7 +22,8 @@ export class ContactusComponent implements OnInit {
 
   constructor(
     private authService:AuthService,
-    private flash:FlashMessagesService
+    private flash:FlashMessagesService,
+    private validate:ValidateService
   ) { }
 
   ngOnInit() {
@@ -29,7 +31,7 @@ export class ContactusComponent implements OnInit {
 
   onFeed(){
     var obj={
-      firstname:this.firstname,
+  firstname:this.firstname,
   lastname:this.lastname,
   email:this.email,
   address:this.address,
@@ -38,25 +40,30 @@ export class ContactusComponent implements OnInit {
   country:this.country,
   zip:this.zip
     }
-    this.authService.feedback(obj).subscribe(res=>{
-      if(res.success)
-      {
-        //this.flash.show(res.msg,{cssClass:'alert-success text-center',timeOut:2000});
-        alert(res.msg);
-      }
-      else{
-        //this.flash.show("Something went wrong.",{cssClass:'alert-alert text-center',timeOut:2000});
-        alert("Something went wrong");
-      }
-    });
-    this.firstname="";
-    this.lastname="";
-    this.address="";
-    this.email="";
-    this.country="";
-    this.zip="";
-    this.state;
-    this.feedback="";
+    if(!this.validate.validateFeed(obj)){
+      alert("all fields are required.");
+    }
+    else{
+      this.authService.feedback(obj).subscribe(res=>{
+        if(res.success)
+        {
+          //this.flash.show(res.msg,{cssClass:'alert-success text-center',timeOut:2000});
+          alert(res.msg);
+        }
+        else{
+          //this.flash.show("Something went wrong.",{cssClass:'alert-alert text-center',timeOut:2000});
+          alert("Something went wrong");
+        }
+      });
+      this.firstname="";
+      this.lastname="";
+      this.address="";
+      this.email="";
+      this.country="";
+      this.zip="";
+      this.state="";
+      this.feedback="";
+    }
   }
 
 

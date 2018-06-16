@@ -7,12 +7,12 @@ var mongoose = require('mongoose');
 var cors = require('cors');
 var passport = require('passport');
 var bodyparser = require('body-parser');
-var nodemailer = require('nodemailer');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var studentRouter = require('./routes/student');
 var postRouter = require('./routes/post');
+var mailRouter = require('./routes/mail');
 
 var dbconfig = require('./db/dbconnection');
 
@@ -56,58 +56,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/student', studentRouter);
 app.use('/post', postRouter);
-
-app.post('/feedback_send', (req, res) => {
-  const output = `
-    <p>You have a new contact request</p>
-    <h3>Contact Details</h3>
-    <ul>  
-      <li>First Name: ${req.body.firstname}</li>
-      <li>Last Name: ${req.body.lastname}</li>
-      <li>Email: ${req.body.email}</li>
-      <li>Address: ${req.body.address}</li>
-      <li>Country: ${req.body.country}</li>
-      <li>State: ${req.body.state}</li>
-      <li>Zip: ${req.body.zip}</li>
-      
-    </ul>
-    <h3>User Feedback</h3>
-    <p>${req.body.feedback}</p>
-  `;
-  
-  // create reusable transporter object using the default SMTP transport
-  let transporter = nodemailer.createTransport({
-    service: 'gmail',
-    secure: false,
-    port: 25,
-        auth: {
-        user: 'cms.feedback9144@gmail.com', // generated ethereal user
-        pass: 'password@9144'  // generated ethereal password
-    },
-    tls:{
-      rejectUnauthorized:false
-    }
-  });
-
-  // setup email data with unicode symbols
-  let mailOptions = {
-      from: '"college manager" <cms.feedback9144@gmail.com>', // sender address
-      to: 'n130318@rguktn.ac.in,ch.mani9144@gmail.com', // list of receivers
-      subject: 'Node Contact Request', // Subject line
-      text: 'Hello world?', // plain text body
-      html: output // html body
-  };
-
-  // send mail with defined transport object
-  transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-          return console.log(error);
-      }
-      console.log("The message was sent!");
-      console.log(info);
-      res.json({msg:"Feedback Sent Successfully",success:"true"});
-      });
-  });
+app.use('/mail', mailRouter);
 
 
 // catch 404 and forward to error handler
