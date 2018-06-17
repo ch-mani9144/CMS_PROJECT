@@ -23,10 +23,18 @@ export class AuthService {
     return this.http.delete("http://localhost:3000/student/delete/"+userid)
       .map(res =>  res.json());
   }
+  
   feedback(data){
     var headres = new Headers();
     headres.append('content-type','application/json');
     return this.http.post("http://localhost:3000/mail/feedback_send",data,{headers:headres})
+    .map(res =>  res.json());
+  }
+
+  sendForgotMail(user){
+    var headres = new Headers();
+    headres.append('content-type','application/json');
+    return this.http.post("http://localhost:3000/mail/forgot",user,{headers:headres})
     .map(res =>  res.json());
   }
 

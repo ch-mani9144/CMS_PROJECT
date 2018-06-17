@@ -30,6 +30,7 @@ import { SearchComponent } from './components/search/search.component';
 import { ForgetComponent } from './components/forget/forget.component';
 import { PostService } from './services/post.service';
 import { ChatComponent } from './components/chat/chat.component';
+import { ResetComponent } from './components/reset/reset.component';
 
 
 
@@ -51,7 +52,8 @@ var appRoutes:Routes=[
     { path:"profile", component:ProfileComponent,canActivate:[AuthGuard]},
     { path:"add", component:AddComponent,canActivate:[AdminGuard]},
     { path:"forgot", component:ForgetComponent},
-    { path:"chat", component:ChatComponent}
+    { path:"chat", component:ChatComponent},
+    { path:"reset", component:ResetComponent}
 
 ]
 
@@ -72,6 +74,7 @@ var appRoutes:Routes=[
     AddComponent,
     ForgetComponent,
     ChatComponent,
+    ResetComponent,
   ],
   imports: [
     BrowserModule,

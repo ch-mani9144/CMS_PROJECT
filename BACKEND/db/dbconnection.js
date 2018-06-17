@@ -1,5 +1,5 @@
 var authentication = require('../config/db.json');
-var server = false;
+var server = true;
 var mongodbHost = '127.0.0.1';
 var mongodbPort = '27017';
 

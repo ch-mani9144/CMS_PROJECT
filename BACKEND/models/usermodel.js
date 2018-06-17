@@ -15,7 +15,9 @@ var UserSchema = mongoose.Schema({
   role: {
     type: String,
     require: true
-  }
+  },
+  resetPasswordToken: String,
+  resetPasswordExpires: String
   // profile:{
   //   type:Boolean,
   //   default: false
