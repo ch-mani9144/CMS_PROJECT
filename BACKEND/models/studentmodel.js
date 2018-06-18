@@ -65,7 +65,11 @@ module.exports.getStudentByDept = function(dept,callback){
   Student.find({dept:dept},callback);
 }
 module.exports.getStudentByDeptYear = function(dept,year,callback){
+  if(year=='all'){
+    Student.find({dept:dept},callback);
+  }else{
   Student.find({dept:dept,year:year},callback);
+  }
 }
 
 

@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var mergejson = require('merge-json');
+var bcrypt = require('bcryptjs');
 var passport = require('passport');
 var jwt = require('jsonwebtoken');
 var config = require('../config/db');
@@ -429,141 +430,44 @@ router.put('/updateuser/:userid',multer({dest:"./public/uploads/"}).single('imag
 });
 
 
-router.post('/forgotpaswd', function(req, res, next) {
+router.post('/changepassword', function(req, res, next) {
   var userid = req.body.userid;
   var oldpassword = req.body.oldpassword;
   var newpassword = req.body.newpassword;
-  var confpassword = req.body.confpassword;
-  if(newpassword==confpassword){
+  var confirmpassword = req.body.confirmpassword;
+  if(newpassword==confirmpassword){
     bcrypt.genSalt(10, (err, salt) => {
       bcrypt.hash(newpassword, salt, (err, hash) => {
         if(err) throw err;
         newpassword = hash;
-        console.log(newpassword);
       });
     });
-  User.getUserByUserId(userid,function(err,user){
-    if(err) throw err;
-    //console.log(user.password);
-    if(!user){
-      return res.json({success:false,msg:"user not found."});
-    }
-      //console.log(oldpassword);
-      //console.log(user.password);
+    User.getUserByUserId(userid,function(err,user){
+      if(err) throw err;
+      if(!user){
+        return res.json({success:false,msg:"user not found."});
+      }
       User.compareUserPassword(oldpassword,user.password,function(err,ismatch){
         if(err) throw err;
         if(ismatch){
-          //Logic to Update Password in allusers Coll.
-          User.findOneAndUpdate({userid:userid},{
-            $set:{
-                password:newpassword,
+          User.findOneAndUpdate({userid:userid},{$set:{password:newpassword}},function(err,result){
+            if(err){
+              res.json(err);
             }
-            },
-            function(err,result){
-                if(err)
-                {
-                    res.json(err);
-                }
-                else
-                {
-                  console.log("Password Updated Succesfully in Alluser Coll.");
-                  //res.json(result);
-                }
-        });
-          if(user.role=='student'){
-            Student.getStudentByUserId(userid,function(err,userdata){
-              if(err) throw err;
-              if(!userdata){
-                return res.json({success: false,msg:"student not found."});
-              }else{
-                //Logic to Update Password in Student Coll.
-                  
-                  Student.findOneAndUpdate({userid:userid},{
-                    $set:{
-                        password:newpassword,
-                    }
-                    },
-                    function(err,result){
-                        if(err)
-                        {
-                            res.json(err);
-                        }
-                        else
-                        {
-                          console.log("Student Password Updated Succesfully in Studnt Coll.");
-                          res.json(result);
-                        }
-                });
-              }
-            });
-          }
-          else if(user.role=='hod'){
-            HOD.getHodByUserId(userid,function(err,userdata){
-              if(err) throw err;
-              if(!userdata){
-                return res.json({success: false,msg:"HOD not found."});
-              }else{
-                //Logic to Update Password in hod Coll.
-
-                  HOD.findOneAndUpdate({userid:userid},{
-                    $set:{
-                        password:newpassword,
-                    }
-                    },
-                    function(err,result){
-                        if(err)
-                        {
-                            res.json(err);
-                        }
-                        else
-                        {
-                            res.json(result);
-                        }
-                });
-              }
-            });
-          }
-          else if(user.role=='tpo'){
-            TPO.getTpoByUserId(userid,function(err,userdata){
-              if(err) throw err;
-              if(!userdata){
-                return res.json({success: false,msg:"TPO not found."});
-              }else{
-                //Logic to Update Password in tpo Coll.
-
-                    
-                  TPO.findOneAndUpdate({userid:userid},{
-                    $set:{
-                        password:newpassword,
-                    }
-                    },
-                    function(err,result){
-                        if(err)
-                        {
-                            res.json(err);
-                        }
-                        else
-                        {
-                            res.json(result);
-                        }
-                });
-
-              }
-            });
-          }
-          else{
-            return res.json({success: false,msg:"Admin Password Updated Succesfully"});
-          }
-          
-        }else{
-          return res.json({success:false,msg:"password update failed, Please Enter Correct Old Pasword"});
+            else{
+              res.json({success:true,msg:"Password Updated Succesfully."});
+            }
+          });
+        }
+        else{
+          return res.json({success:false,msg:"password update failed,Invalid Old Password."});
         }
       });
-  });
-}
-else{
-  console.log("Confirm Password and New Password Need to be Matched");
-}
+    });
+  }
+  else{
+    res.json({success:false,msg:"Confirm Password and New Password Need to be Matched"});
+  }
 });
 
 

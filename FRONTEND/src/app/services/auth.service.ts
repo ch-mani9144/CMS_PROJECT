@@ -52,6 +52,12 @@ export class AuthService {
       .map(res =>  res.json());
   }
 
+  changePassword(obj){
+    var headers= new Headers();
+    return this.http.post("http://localhost:3000/users/changepassword",obj,{headers:headers})
+      .map(res => res.json());
+  }
+
   // getStudentProfile(userid){
   //   var headres = new Headers();
   //   headres.append('content-type','application/json');

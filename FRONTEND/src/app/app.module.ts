@@ -53,7 +53,7 @@ var appRoutes:Routes=[
     { path:"add", component:AddComponent,canActivate:[AdminGuard]},
     { path:"forgot", component:ForgetComponent},
     { path:"chat", component:ChatComponent},
-    { path:"reset", component:ResetComponent}
+    { path:"reset", component:ResetComponent,canActivate:[AuthGuard]}
 
 ]
 

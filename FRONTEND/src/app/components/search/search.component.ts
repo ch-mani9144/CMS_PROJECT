@@ -37,7 +37,31 @@ export class SearchComponent implements OnInit {
       year:this.year
     }
     this.authService.SearchStudents(basedon)
-      .subscribe(results => this.students=results);
+      .subscribe(results =>{
+        if(results.length==0){
+          this.flashmessage.show("No result found.",{cssClass:'alert-danger text-center',timeOut:2000});
+          this.students=[];
+        }else{
+          this.students=results
+        }
+      });
+    }
+
+    onHodSearchSubmit(){
+      var hod = JSON.parse(localStorage.getItem('user'));
+      var basedon={
+        dept:hod.dept,
+        year:this.year
+      }
+      this.authService.SearchStudents(basedon)
+        .subscribe(results =>{
+          if(results.length==0){
+            this.flashmessage.show("No result found.",{cssClass:'alert-danger text-center',timeOut:2000});
+            this.students=[];
+          }else{
+            this.students=results
+          }
+        });
     }
 
   hasResult(){
@@ -91,7 +115,7 @@ deletestudent(student){
   this.authService.deleteStudent(student.userid).subscribe(data=>{
     if(data.success){
       this.flashmessage.show("student record deleted",{cssClass:'alert-success text-center',timeOut:2000});
-      this.students.splice(this.students.indexOf(student))
+      this.students.splice(this.students.indexOf(student),1)
     }
     else
     {
