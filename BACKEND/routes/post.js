@@ -41,7 +41,8 @@ router.post('/sendpost', (req, res) => {
   
   router.get('/postsforstudents/:dept/:year',function(req,res)
    {
-    var quary= {$or:[ {prole:'tpo'},{dept:req.params.dept,$or:[{year:req.params.year},{year:'all'}]}]};
+     var quary= {$and:[{$or:[ {dept:req.params.dept},{dept:'all'}]},{$or:[{year:req.params.year},{year:'all'}]}]};
+
     POSTS.find(quary,function(err,posts){
         if(err){
             return res.json({"error":err});}
@@ -53,7 +54,7 @@ router.post('/sendpost', (req, res) => {
 
 router.get('/postsforhods/:dept',function(req,res)
 {
-    var quary= {$or:[ {prole:'tpo'},{dept:req.params.dept}]};
+    var quary= {$or:[ {dept:'all'},{dept:req.params.dept}]};
     POSTS.find(quary,function(err,posts){
         if(err){
             return res.json({"error":err});}
@@ -66,7 +67,7 @@ router.get('/postsforhods/:dept',function(req,res)
 
 router.get('/postsfortpos',function(req,res)
 {
-    var quary= {prole:'tpo'};
+    var quary = {prole:'tpo'};
     POSTS.find(quary,function(err,posts){
         if(err){
             return res.json({"error":err});}
@@ -93,13 +94,14 @@ router.get('/postsfortpos',function(req,res)
   
   //GET Notification By Role
   
-  router.get('/postsbyrole/:role',function(req,res)
+  router.get('/postsbyrole/:dept/:year/:role',function(req,res)
    {
-    POSTS.find({prole:req.params.role},function(err,posts){
+    var quary= {$and:[{$or:[ {dept:req.params.dept},{dept:'all'}]},{$or:[{year:req.params.year},{year:'all'}]},{prole:req.params.role}]};
+    POSTS.find(quary,function(err,posts){
         if(err){
             return res.json({"error":err});}
             else{
-            return res.json({"output":posts})
+            return res.json(posts)
             }
    });
   });

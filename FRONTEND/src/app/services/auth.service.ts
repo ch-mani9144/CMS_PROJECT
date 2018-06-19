@@ -12,32 +12,13 @@ export class AuthService {
   role: any;
   constructor(private http:Http,public jwtHelper: JwtHelperService) { }
 
+  //users apis
   addUser(user){
     var headres = new Headers();
     headres.append('content-type','application/json');
     return this.http.post("http://localhost:3000/users/adduser",user,{headers:headres})
       .map(res =>  res.json());
   }
-
-  deleteStudent(userid){
-    return this.http.delete("http://localhost:3000/student/delete/"+userid)
-      .map(res =>  res.json());
-  }
-  
-  feedback(data){
-    var headres = new Headers();
-    headres.append('content-type','application/json');
-    return this.http.post("http://localhost:3000/mail/feedback_send",data,{headers:headres})
-    .map(res =>  res.json());
-  }
-
-  sendForgotMail(user){
-    var headres = new Headers();
-    headres.append('content-type','application/json');
-    return this.http.post("http://localhost:3000/mail/forgot",user,{headers:headres})
-    .map(res =>  res.json());
-  }
-
 
   authUser(user){
     var headres = new Headers();
@@ -58,13 +39,19 @@ export class AuthService {
       .map(res => res.json());
   }
 
-  // getStudentProfile(userid){
-  //   var headres = new Headers();
-  //   headres.append('content-type','application/json');
-  //   return this.http.get("http://localhost:3000/student/getstudent/"+userid,{headers:headres})
-  //     .map(res =>  res.json());
-  // }
+  updateProfile(userid,profileData){
+    return this.http.put("http://localhost:3000/users/updateuser/"+userid,profileData)
+    .map(res =>  res.json());
+  }
 
+  
+  //students apis
+  deleteStudent(userid){
+    return this.http.delete("http://localhost:3000/student/delete/"+userid)
+      .map(res =>  res.json());
+  }
+
+  
   SearchStudents(basedon){
     var headres = new Headers();
     headres.append('content-type','application/json');
@@ -72,10 +59,28 @@ export class AuthService {
     .map(res =>  res.json());
   }
 
-  updateProfile(userid,profileData){
-    return this.http.put("http://localhost:3000/users/updateuser/"+userid,profileData)
+
+  //mails apis
+  feedback(data){
+    var headres = new Headers();
+    headres.append('content-type','application/json');
+    return this.http.post("http://localhost:3000/mail/feedback_send",data,{headers:headres})
     .map(res =>  res.json());
   }
+
+  sendForgotMail(user){
+    var headres = new Headers();
+    headres.append('content-type','application/json');
+    return this.http.post("http://localhost:3000/mail/forgot",user,{headers:headres})
+    .map(res =>  res.json());
+  }
+
+  // getStudentProfile(userid){
+  //   var headres = new Headers();
+  //   headres.append('content-type','application/json');
+  //   return this.http.get("http://localhost:3000/student/getstudent/"+userid,{headers:headres})
+  //     .map(res =>  res.json());
+  // }
 
   isProfileFilled(){
     var data=JSON.parse(localStorage.getItem('user'));

@@ -5,6 +5,7 @@ import { AuthService } from '../../services/auth.service';
 import { FlashMessagesService } from 'angular2-flash-messages';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
+import { __core_private_testing_placeholder__ } from '@angular/core/testing';
 
 @Component({
   selector: 'app-dashboard',
@@ -33,7 +34,7 @@ export class DashboardComponent implements OnInit {
     this.postService.getStudentPosts(this.user.dept,this.user.year).subscribe(posts=>{
       this.posts=posts;
       this.posts.reverse();
-      console.log(this.posts);
+      //console.log(this.posts);
     });}
     else if(this.user.role=="hod"){
       this.postService.getHodPosts(this.user.dept).subscribe(posts=>{
@@ -62,29 +63,46 @@ export class DashboardComponent implements OnInit {
     if(this.authService.tpoLoggedIn()){
       postObj.dept=this.dept;
     }
-    this.postService.postNotification(postObj).subscribe(result => {
-      if(result.msg == "posted successfully"){
-        this.flashmessage.show(result.msg,{cssClass:'alert-success text-center',timeOut:2000});
-        this.posts.unshift(postObj);
-        this.title="";
-        this.content="";
-        this.year="";
-        this.dept="";
+    if(postObj.title==""||postObj.title==undefined||postObj.content==""||postObj.content==undefined||postObj.year==undefined)
+    {
+      this.flashmessage.show("All fields are required.",{cssClass:'alert-danger text-center',timeOut:2000})
+
+    }
+    else
+    {
+      if(this.authService.tpoLoggedIn()&&(postObj.dept==undefined||postObj.dept==""))
+      {
+        this.flashmessage.show("All fields are required.",{cssClass:'alert-danger text-center',timeOut:2000})
       }
       else{
-        this.flashmessage.show("Something went wrong.",{cssClass:'alert-success text-center',timeOut:2000});
+        this.postService.postNotification(postObj).subscribe(result => {
+          if(result.msg == "posted successfully"){
+            this.flashmessage.show(result.msg,{cssClass:'alert-success text-center',timeOut:2000});
+            this.posts.unshift(postObj);
+            this.title="";
+            this.content="";
+            this.year=undefined;
+            this.dept=undefined;
+          }
+          else{
+            this.flashmessage.show("Something went wrong.",{cssClass:'alert-success text-center',timeOut:2000});
+          }
+        });
       }
-    } );
+    }
   }
 
   getPostsOf()
   {
-
-    alert("changed");
-    this.ngOnInit();
-
+    if(this.pselect=='all'||this.pselect==""){
+      this.ngOnInit();
+    }
+    else{
+      this.postService.getPostsByRole(this.user.dept,this.user.year,this.pselect).subscribe(posts=>{
+        this.posts=posts;
+        this.posts.reverse();
+        //console.log(this.posts);
+    });
   }
-
-
-  
+  }
 }

@@ -39,9 +39,9 @@
                       </ul>
                   </div>-->
                     <div class="button-group" *ngIf="authService.tpoLoggedIn()">
-                        <select class="btn btn-primary dropdown-toggle" data-toggle="dropdown" placeholder="year" type="button" style="float:left; margin-right:11px; border-radius: 8px;" name="dept" [(ngModel)]="dept">
+                        <select class="btn btn-primary dropdown-toggle" data-toggle="dropdown" type="button" style="float:left; margin-right:11px; border-radius: 8px;" name="dept" [(ngModel)]="dept">
                             <option [ngValue]="undefined" disabled selected>Dept.</option>
-                            <option value="" selected>All</option>
+                            <option value="all" selected>All</option>
                             <option value="CSE">CSE</option>
                             <option value="EEE">EEE</option>
                             <option value="ECE">ECE</option>
@@ -105,7 +105,7 @@
       
     
     <div class="dropdown float-right" >
-        <select class="btn btn-primary btn-md dropdown-toggle p-23" type="button" data-toggle="dropdown" name="pselect" [(ngModel)]="paselect" (change)="getPostsOf()">
+        <select class="btn btn-primary btn-md dropdown-toggle p-23" type="button" data-toggle="dropdown" name="pselect" [(ngModel)]="pselect" (change)="getPostsOf()">
         <!-- <span class="caret"></span>
         <ul class="dropdown-menu">
           <option><li><a href="#"></a>HTML</a></li></option>
@@ -115,7 +115,7 @@
         <option value="undefined" selected disabled>Select</option>
         <option value="all">ALL</option>
         <option value="hod" >HOD</option>
-        <option value="TPO">TPO</option>
+        <option value="tpo">TPO</option>
       </select>
       </div>
     </div>

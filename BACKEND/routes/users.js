@@ -64,7 +64,7 @@ router.post('/login', function(req, res, next) {
   var token;
   User.getUserByUserId(userid,function(err,user){
     if(err) throw err;
-    console.log(userid);
+    // console.log(userid);
     if(!user){
       return res.json({success:false,msg:"user not found."});
     }
