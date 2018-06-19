@@ -55,6 +55,10 @@
         <li *ngIf="authService.loggedIn() && !authService.adminLoggedIn()" class="nav-item" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}">
             <a class="nav-link" [routerLink]="['/profile']">Profile</a>
           </li>
+          <li *ngIf="authService.loggedIn()" class="nav-item" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}">
+            <a class="nav-link" [routerLink]="['/reset']">Change_Password</a>
+          </li>
+
         <li *ngIf="authService.loggedIn()" class="nav-item">
           <a class="nav-link" (click)="onLogoutClick()" routerLink="/login">Logout</a>
         </li> 

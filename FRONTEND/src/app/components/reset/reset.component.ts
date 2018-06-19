@@ -40,7 +40,10 @@ export class ResetComponent implements OnInit {
        this.authservice.changePassword(obj).subscribe(result =>{
          if(result.success){
           this.flash.show(result.msg,{cssClass:'alert-success text-center',timeOut:2000});
-          this.router.navigate(['/profile']);
+          if(!this.authservice.adminLoggedIn())
+            this.router.navigate(['/profile']);
+          else
+          this.router.navigate(['/add']);
          }
          else{
           this.flash.show(result.msg,{cssClass:'alert-danger text-center',timeOut:2000});
@@ -56,7 +59,10 @@ export class ResetComponent implements OnInit {
     this.confirmpassword="";
     this.newpassword="";
     this.oldpassword="";
-    this.router.navigate(['/profile']);
+    if(!this.authservice.adminLoggedIn())
+      this.router.navigate(['/profile']);
+    else
+      this.router.navigate(['/add']);
   }
 
 }
