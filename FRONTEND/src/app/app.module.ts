@@ -31,6 +31,7 @@ import { ForgetComponent } from './components/forget/forget.component';
 import { PostService } from './services/post.service';
 import { ChatComponent } from './components/chat/chat.component';
 import { ResetComponent } from './components/reset/reset.component';
+import { ResetpwdComponent } from './components/resetpwd/resetpwd.component';
 
 
 
@@ -53,7 +54,8 @@ var appRoutes:Routes=[
     { path:"add", component:AddComponent,canActivate:[AdminGuard]},
     { path:"forgot", component:ForgetComponent},
     { path:"chat", component:ChatComponent},
-    { path:"reset", component:ResetComponent,canActivate:[AuthGuard]}
+    { path:"reset", component:ResetComponent,canActivate:[AuthGuard]},
+    { path:"resetpwd", component:ResetpwdComponent}
 
 ]
 
@@ -75,6 +77,7 @@ var appRoutes:Routes=[
     ForgetComponent,
     ChatComponent,
     ResetComponent,
+    ResetpwdComponent,
   ],
   imports: [
     BrowserModule,

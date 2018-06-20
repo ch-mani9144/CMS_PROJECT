@@ -75,6 +75,13 @@ export class AuthService {
     .map(res =>  res.json());
   }
 
+  resetPwd(token,password){
+    var headres = new Headers();
+    headres.append('content-type','application/json');
+    return this.http.post("http://localhost:3000/mail/reset/"+token,{password:password},{headers:headres})
+    .map(res => res.json());
+  }
+
   // getStudentProfile(userid){
   //   var headres = new Headers();
   //   headres.append('content-type','application/json');

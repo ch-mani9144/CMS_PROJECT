@@ -9,6 +9,7 @@ const Student = require('../models/studentmodel');
 const HOD = require('../models/hodmodel');
 const TPO = require('../models/tpomodel');
 var xoauth2 = require('xoauth2');
+var store=require("store");
 
 router.get('/', function(req, res, next) {
     res.send('respond with a resource:mail');
@@ -147,7 +148,8 @@ router.post('/forgot', function(req, res, next) {
             'If you did not request this, please ignore this email and your password will remain unchanged.\n'
         };
         smtpTransport.sendMail(mailOptions, function(err) {
-            res.json({success:true, msg:'An e-mail has been sent to ' + usermail + ' with further instructions.'});
+            if(!err)
+            return res.json({success:true, msg:'An e-mail has been sent to ' + usermail + ' with further instructions.'});
             done(err, 'done');
         });
         }
@@ -242,14 +244,18 @@ router.post('/reset/:token', function(req, res) {
 router.get('/reset/:token', function(req, res) {
     User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function(err, user) {
         if (!user) {
-        res.json({success:false,msg:'Password reset token is invalid or has expired.'});
-        return res.redirect('/forgot');
+        //req.flash('error', 'Password reset token is invalid or has expired.');
+        //res.json({msg:"not user"});
+        return res.redirect('http://localhost:4200/forgot');
         }
-        //res.send("helllo");
-        res.render('reset', {
-        user: req.user
-        });
+        store.set("token",req.params.token);
+        //console.log(store.get("token"));
+        res.redirect('http://localhost:4200/resetpwd?token='+req.params.token);
     });
+    });
+
+    router.get('/getpwdresettoken', function(req, res) {
+       
     });
 
 module.exports = router;
